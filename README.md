@@ -23,14 +23,18 @@ GitScribe 是一个 IntelliJ Platform 插件，用于根据暂存或选中的 VC
 - Azure OpenAI
 - Claude Code CLI
 - Codex CLI
+- DeepSeek
 - Gemini Google AI
 - Gemini Vertex AI
 - GitHub Models
 - Hugging Face
+- MiniMax
 - Mistral AI
 - Ollama
 - OpenAI
 - Qianfan
+- 智谱
+- 硅基流动
 
 大部分在线模型客户端基于 [langchain4j](https://github.com/langchain4j/langchain4j) 实现。CLI 客户端会调用本机已安装的命令行工具，并使用其输出作为提交信息来源。
 
@@ -116,7 +120,7 @@ cd GitScribe
 - 插件 ID：`com.github.allanwxl.gitscribe`
 - Gradle 项目名：`gitscribe-intellij-plugin`
 - 仓库地址：[allanwxl/GitScribe](https://github.com/allanwxl/GitScribe)
-- 当前插件版本：`2.19.1`
+- 当前插件版本：`0.0.1`
 
 ## 贡献
 
