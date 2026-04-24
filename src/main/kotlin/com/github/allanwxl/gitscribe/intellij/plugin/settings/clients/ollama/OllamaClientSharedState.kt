@@ -1,0 +1,28 @@
+package com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.ollama
+
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmClientSharedState
+import com.intellij.openapi.components.*
+import com.intellij.util.xmlb.annotations.XCollection
+
+@Service(Service.Level.APP)
+@State(name = "OllamaClientSharedState", storages = [Storage("GitScribeOllama.xml")])
+class OllamaClientSharedState : PersistentStateComponent<OllamaClientSharedState>, LlmClientSharedState {
+
+    companion object {
+        @JvmStatic
+        fun getInstance(): OllamaClientSharedState = service()
+    }
+
+    @XCollection(style = XCollection.Style.v2)
+    override val hosts = mutableSetOf("http://localhost:11434/")
+
+    @XCollection(style = XCollection.Style.v2)
+    override val modelIds: MutableSet<String> = mutableSetOf("llama3")
+
+    override fun getState(): OllamaClientSharedState = this
+
+    override fun loadState(state: OllamaClientSharedState) {
+        modelIds += state.modelIds
+        hosts += state.hosts
+    }
+}

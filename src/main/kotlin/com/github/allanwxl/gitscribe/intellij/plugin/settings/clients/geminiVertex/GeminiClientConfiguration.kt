@@ -1,0 +1,70 @@
+package com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.geminiVertex
+
+import com.github.allanwxl.gitscribe.intellij.plugin.Icons
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmClientSharedState
+import com.intellij.openapi.project.Project
+import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.vcs.commit.AbstractCommitWorkflowHandler
+import kotlinx.coroutines.Job
+import javax.swing.Icon
+
+// Can not rename this class because of backwards compatibility
+// with persistent component - AppSettings2
+class GeminiClientConfiguration : LlmClientConfiguration(
+    "Gemini Vertex",
+    "gemini-pro"
+) {
+    @Attribute
+    var temperature: String = "0.7"
+    @Attribute
+    var projectId: String = "project-id"
+    @Attribute
+    var location: String = "us-central1"
+    @Attribute
+    var topK: Int? = null
+    @Attribute
+    var topP: Float? = null
+
+    companion object {
+        const val CLIENT_NAME = "Gemini Vertex"
+    }
+
+    override fun getClientName(): String {
+        return CLIENT_NAME
+    }
+
+    override fun getClientIcon(): Icon {
+        return Icons.GEMINI_VERTEX.getThemeBasedIcon()
+    }
+
+    override fun getSharedState(): LlmClientSharedState {
+        return GeminiVertexClientSharedState.getInstance()
+    }
+
+    override fun generateCommitMessage(commitWorkflowHandler: AbstractCommitWorkflowHandler<*, *>, project: Project) {
+        return GeminiVertexClientService.getInstance().generateCommitMessage(this, commitWorkflowHandler, project)
+    }
+
+    override fun getGenerateCommitMessageJob(): Job? {
+        return GeminiVertexClientService.getInstance().generateCommitMessageJob
+    }
+
+    override fun clone(): LlmClientConfiguration {
+        val copy = GeminiClientConfiguration()
+        copy.id = id
+        copy.name = name
+        copy.modelId = modelId
+        copy.cleanupRegex = cleanupRegex
+        copy.temperature = temperature
+        copy.projectId = projectId
+        copy.location = location
+        copy.topP = topP
+        copy.topK = topK
+        return copy
+    }
+
+    override fun panel() = GeminiVertexClientPanel(this)
+
+
+}

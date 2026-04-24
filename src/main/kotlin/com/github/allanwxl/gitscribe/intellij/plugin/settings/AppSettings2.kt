@@ -1,0 +1,182 @@
+package com.github.allanwxl.gitscribe.intellij.plugin.settings
+
+import com.github.allanwxl.gitscribe.intellij.plugin.GitScribeUtils
+import com.github.allanwxl.gitscribe.intellij.plugin.GitScribeUtils.getCredentialAttributes
+import com.github.allanwxl.gitscribe.intellij.plugin.notifications.Notification
+import com.github.allanwxl.gitscribe.intellij.plugin.notifications.sendNotification
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.amazonBedrock.AmazonBedrockClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.anthropic.AnthropicClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.claudeCode.ClaudeCodeClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.codexCli.CodexCliClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.githubModels.GitHubModelsClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.mistral.MistralAIClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.openAi.OpenAiClientSharedState
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.prompts.DefaultPrompts
+import com.intellij.ide.passwordSafe.PasswordSafe
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.util.xmlb.Converter
+import com.intellij.util.xmlb.XmlSerializerUtil
+import com.intellij.util.xmlb.annotations.Attribute
+import com.intellij.util.xmlb.annotations.OptionTag
+import com.intellij.util.xmlb.annotations.XCollection
+import com.intellij.util.xmlb.annotations.XMap
+import java.util.*
+
+@State(
+    name = AppSettings2.SERVICE_NAME,
+    storages = [
+        Storage("GitScribe2.xml")
+    ]
+)
+@Service(Service.Level.APP)
+class AppSettings2 : PersistentStateComponent<AppSettings2> {
+
+    companion object {
+        const val SERVICE_NAME = "com.github.allanwxl.gitscribe.intellij.plugin.settings.AppSettings2"
+        val instance: AppSettings2
+            get() = ApplicationManager.getApplication().getService(AppSettings2::class.java)
+    }
+
+    private var hits = 0
+    var requestSupport = true
+    var lastVersion: String? = null
+
+    @OptionTag(converter = LocaleConverter::class)
+    var locale: Locale = Locale.ENGLISH
+
+    @XCollection(
+        elementTypes = [
+            OpenAiClientConfiguration::class,
+            OllamaClientConfiguration::class,
+            QianfanClientConfiguration::class,
+            GeminiClientConfiguration::class,
+            GeminiGoogleClientConfiguration::class,
+            AnthropicClientConfiguration::class,
+            AzureOpenAiClientConfiguration::class,
+            HuggingFaceClientConfiguration::class,
+            GitHubModelsClientConfiguration::class,
+            MistralAIClientConfiguration::class,
+            AmazonBedrockClientConfiguration::class,
+            ClaudeCodeClientConfiguration::class,
+            CodexCliClientConfiguration::class
+        ],
+        style = XCollection.Style.v2
+    )
+    var llmClientConfigurations = setOf<LlmClientConfiguration>(
+        OpenAiClientConfiguration()
+    )
+
+    @Attribute
+    var activeLlmClientId: String? = null
+
+    @XMap
+    var prompts = DefaultPrompts.toPromptsMap()
+    var activePrompt = DefaultPrompts.BASIC.prompt
+    var promptDialogWidth = 800
+    var promptDialogHeight = 600
+
+    var appExclusions: Set<String> = setOf()
+
+    @Attribute
+    var useStreamingResponse: Boolean = true
+
+    override fun getState() = this
+
+    override fun loadState(state: AppSettings2) {
+        XmlSerializerUtil.copyBean(state, this)
+        llmClientConfigurations.forEach { it.afterSerialization() }
+    }
+
+    override fun noStateLoaded() {
+        val appSettings = AppSettings.instance
+        migrateSettingsFromVersion1(appSettings)
+        val openAiLlmClient =
+            llmClientConfigurations.find { it.getClientName() == OpenAiClientConfiguration.CLIENT_NAME }
+        migrateOpenAiClientFromVersion1(openAiLlmClient as OpenAiClientConfiguration, appSettings)
+    }
+
+    private fun migrateSettingsFromVersion1(appSettings: AppSettings) {
+        hits = appSettings.hits
+        locale = appSettings.locale
+        lastVersion = appSettings.lastVersion
+        requestSupport = appSettings.requestSupport
+        prompts = appSettings.prompts
+        activePrompt = appSettings.currentPrompt
+        appExclusions = appSettings.appExclusions
+    }
+
+    private fun migrateOpenAiClientFromVersion1(
+        openAiLlmClientConfiguration: OpenAiClientConfiguration?,
+        appSettings: AppSettings
+    ) {
+        openAiLlmClientConfiguration?.apply {
+            host = appSettings.openAIHost
+            appSettings.openAISocketTimeout.toIntOrNull()?.let { timeout = it }
+            modelId = appSettings.openAIModelId
+            temperature = appSettings.openAITemperature
+
+            val credentialAttributes = getCredentialAttributes(appSettings.openAITokenTitle)
+            AppService.instance.retrieveToken(credentialAttributes) { token ->
+                token?.let {
+                    try {
+                        PasswordSafe.instance.setPassword(getCredentialAttributes(id), token.toString(false))
+                    } catch (e: Exception) {
+                        sendNotification(Notification.unableToSaveToken(e.message))
+                    }
+                }
+            }
+        }
+
+        OpenAiClientSharedState.getInstance().hosts.addAll(appSettings.openAIHosts)
+        OpenAiClientSharedState.getInstance().modelIds.addAll(appSettings.openAIModelIds)
+    }
+
+    fun recordHit() {
+        hits++
+        if (requestSupport && (hits == 50 || hits % 100 == 0)) {
+            sendNotification(Notification.star())
+        }
+    }
+
+    fun isPathExcluded(path: String): Boolean {
+        return GitScribeUtils.matchesGlobs(path, appExclusions)
+    }
+
+    fun getActiveLLMClientConfiguration(): LlmClientConfiguration? {
+        return getActiveLLMClientConfiguration(activeLlmClientId)
+    }
+
+    fun getActiveLLMClientConfiguration(activeLLMClientConfigurationId: String?): LlmClientConfiguration? {
+        return llmClientConfigurations.find { it.id == activeLLMClientConfigurationId }
+            ?: llmClientConfigurations.firstOrNull()
+    }
+
+    fun setActiveLlmClient(newId: String) {
+        // TODO @allanwxl: Throw exception if llm client id is not valid
+        llmClientConfigurations.find { it.id == newId }?.let {
+            activeLlmClientId = newId
+        }
+    }
+
+    class LocaleConverter : Converter<Locale>() {
+        override fun toString(value: Locale): String? {
+            return value.toLanguageTag()
+        }
+
+        override fun fromString(value: String): Locale? {
+            return Locale.forLanguageTag(value)
+        }
+    }
+}
