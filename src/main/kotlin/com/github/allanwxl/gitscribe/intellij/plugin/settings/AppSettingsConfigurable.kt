@@ -101,14 +101,11 @@ class AppSettingsConfigurable(val project: Project, cs: CoroutineScope) : BoundC
             comboBox(locales, GitScribeListCellRenderer())
                 .widthGroup("input")
                 .bindItem(
-                    getter = { locales.find { it.language == projectSettings.locale.language } ?: Locale.ENGLISH },
+                    getter = { locales.find { it.language == projectSettings.locale.language } ?: Locale.CHINESE },
                     setter = { setActiveLocale(it)}
                 )
 
             contextHelp(message("settings.locale.contextHelp"))
-
-            browserLink(message("settings.more-prompts"), GitScribeBundle.URL_PROMPTS_DISCUSSION.toString())
-                .align(AlignX.RIGHT)
         }
         row {
             label(message("settings.prompt")).widthGroup("labelPrompt")

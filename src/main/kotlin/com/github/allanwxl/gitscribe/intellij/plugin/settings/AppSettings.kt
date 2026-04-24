@@ -24,7 +24,7 @@ class AppSettings : PersistentStateComponent<AppSettings> {
     var hits = 0
 
     @OptionTag(converter = LocaleConverter::class)
-    var locale: Locale = Locale.ENGLISH
+    var locale: Locale = Locale.CHINESE
 
     var requestSupport = true
     var lastVersion: String? = null

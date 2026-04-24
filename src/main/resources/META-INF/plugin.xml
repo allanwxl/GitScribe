@@ -14,50 +14,67 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>GitScribe is a plugin that generates your commit messages by using git diff and LLMs.</p>
-        <h3>Features</h3>
+        <p>GitScribe 是一个 IntelliJ Platform 插件，用于根据暂存或选中的 VCS 变更，通过大语言模型生成提交信息。</p>
+        <p>它会集成到 JetBrains IDE 的提交工作流中，读取本次提交涉及的文件或行级 diff，构造提示词，并把生成的提交信息写回提交窗口。</p>
+        <h3>功能</h3>
         <ul>
-            <li>Generate commit message from git diff using LLM</li>
-            <li>Compute diff only from the selected files and lines in the commit dialog</li>
-            <li>Create your own prompt for commit message generation</li>
-            <li>Use predefined variables and hint to customize your prompt</li>
-            <li>Supports Git and Subversion as version control systems.</li>
+            <li>根据 Git 或 Subversion diff 生成提交信息。</li>
+            <li>支持只使用提交窗口中选中的文件和行。</li>
+            <li>支持配置多个 LLM 客户端，并在生成时切换使用。</li>
+            <li>支持自定义提示词模板，可使用 <code>{diff}</code>、<code>{branch}</code>、<code>{locale}</code>、<code>{hint}</code>、历史提交信息等变量。</li>
+            <li>支持按项目配置提示词、输出语言、LLM 客户端和排除规则。</li>
+            <li>支持用 glob 规则排除不想发送给模型的路径。</li>
+            <li>支持在设置页校验 API 客户端配置。</li>
         </ul>
-        <h3>Supported models</h3>
+        <h3>支持的 LLM 客户端</h3>
         <ul>
             <li>Amazon Bedrock</li>
             <li>Anthropic</li>
-            <li>Azure Open AI</li>
+            <li>Azure OpenAI</li>
+            <li>Claude Code CLI</li>
+            <li>Codex CLI</li>
+            <li>DeepSeek</li>
             <li>Gemini Google AI</li>
             <li>Gemini Vertex AI</li>
             <li>GitHub Models</li>
             <li>Hugging Face</li>
+            <li>MiniMax</li>
             <li>Mistral AI</li>
-            <li>Open AI</li>
             <li>Ollama</li>
-            <li>Qianfan (Ernie)</li>
+            <li>OpenAI</li>
+            <li>Qianfan</li>
+            <li>智谱</li>
+            <li>硅基流动</li>
         </ul>
-        <p>The plugin is implemented in a generic way and uses <a href="https://github.com/langchain4j/langchain4j">langchain4j</a>
-        for creating LLM API clients. If you would like to use some other LLM model that is supported by langchain4j,
-        please make a feature request in GitHub issues.</p>
-        <h3>Usage</h3>
-        <p>To get started, install the plugin and set LLM client configuration in plugin's settings::
-        <br/>
-        Settings > Tools > GitScribe</p>
-        <h3>Troubleshooting</h3>
-        <p>We'd love to hear from you if you have any issues or feature requests. Please report them
-        <a href="https://github.com/allanwxl/GitScribe/issues">here</a>.</p>
-        <h3>Demo</h3>
+        <p>大部分在线模型客户端基于 <a href="https://github.com/langchain4j/langchain4j">langchain4j</a> 实现。CLI 客户端会调用本机已安装的命令行工具，并使用其输出作为提交信息来源。</p>
+        <h3>兼容性</h3>
+        <ul>
+            <li>IntelliJ Platform：2024.2+</li>
+            <li>Java 工具链：21</li>
+            <li>VCS 集成：Git 和 Subversion</li>
+        </ul>
+        <p>理论上，支持 IntelliJ Platform 提交流程的 JetBrains IDE 都可以使用，例如 IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、DataGrip、RubyMine、Rider 和 DataSpell。</p>
+        <h3>使用方式</h3>
+        <ol>
+            <li>打开 Settings &gt; Tools &gt; GitScribe。</li>
+            <li>添加并配置一个 LLM 客户端。</li>
+            <li>可选：编辑默认提示词，或添加自己的提示词模板。</li>
+            <li>打开提交窗口。</li>
+            <li>点击提交信息工具栏中的 GitScribe 按钮，或使用快捷键 Ctrl + Alt + C。</li>
+        </ol>
+        <p>如果使用 Claude Code CLI 或 Codex CLI，请确保对应命令行工具已经安装并能通过 PATH 找到，或者在 GitScribe 设置页中手动指定 CLI 路径。</p>
+        <h3>演示</h3>
         <p>
             <img
             src="https://raw.githubusercontent.com/allanwxl/GitScribe/main/screenshots/plugin-white.gif"
             border="0"
             width="600"
-            alt="Demo.gif"/>
+            alt="GitScribe 演示"/>
         </p>
-        <h3>Support</h3>
+        <h3>链接</h3>
         <ul>
-            <li><a href="https://github.com/allanwxl/GitScribe">Star the repository</a></li>
+            <li><a href="https://github.com/allanwxl/GitScribe">GitHub 仓库</a></li>
+            <li><a href="https://github.com/allanwxl/GitScribe/issues">提交 Bug 或功能建议</a></li>
         </ul>
     ]]></description>
 
@@ -118,7 +135,7 @@
         <action
                 id="GitScribe"
                 text="GitScribe"
-                description="Create commit message with AI"
+                description="根据选中的 VCS 变更通过 AI 生成提交信息"
                 class="com.github.allanwxl.gitscribe.intellij.plugin.GitScribeAction">
 
             <keyboard-shortcut
@@ -131,7 +148,7 @@
         <action
                 id="GitScribeSplitButton"
                 text="GitScribe"
-                description="Create commit message with AI"
+                description="根据选中的 VCS 变更通过 AI 生成提交信息"
                 icon="/icons/gitScribe15.svg"
                 class="com.github.allanwxl.gitscribe.intellij.plugin.GitScribeSplitButtonAction">
 

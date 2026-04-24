@@ -54,7 +54,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     var lastVersion: String? = null
 
     @OptionTag(converter = LocaleConverter::class)
-    var locale: Locale = Locale.ENGLISH
+    var locale: Locale = Locale.CHINESE
 
     @XCollection(
         elementTypes = [

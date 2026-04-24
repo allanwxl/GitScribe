@@ -41,7 +41,7 @@ class ProjectSettings : PersistentStateComponent<ProjectSettings?> {
         get() = getActivePrompt(field)
 
     @OptionTag(converter = LocaleConverter::class)
-    var locale: Locale = Locale.ENGLISH
+    var locale: Locale = Locale.CHINESE
         get() = getActiveLocale(field)
     @Attribute
     var isProjectSpecificPrompt: Boolean = false

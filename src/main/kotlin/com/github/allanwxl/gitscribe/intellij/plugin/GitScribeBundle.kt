@@ -16,7 +16,6 @@ private const val BUNDLE = "messages.GitScribeBundle"
 object GitScribeBundle : DynamicBundle(BUNDLE) {
 
     val URL_BUG_REPORT = URI("https://github.com/allanwxl/GitScribe/issues")
-    val URL_PROMPTS_DISCUSSION = URI("https://github.com/allanwxl/GitScribe/discussions/18")
     val URL_GITHUB = URI("https://github.com/allanwxl/GitScribe")
 
     @Suppress("SpreadOperator")
