@@ -8,14 +8,18 @@ import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.anthropic.
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.claudeCode.ClaudeCodeClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.codexCli.CodexCliClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.azureOpenAi.AzureOpenAiClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.deepSeek.DeepSeekClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.geminiGoogle.GeminiGoogleClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.geminiVertex.GeminiClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.githubModels.GitHubModelsClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.huggingface.HuggingFaceClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.minimax.MiniMaxClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.mistral.MistralAIClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.ollama.OllamaClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.openAi.OpenAiClientConfiguration
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.qianfan.QianfanClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.siliconFlow.SiliconFlowClientConfiguration
+import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.zhipuAi.ZhipuAiClientConfiguration
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Splitter
@@ -165,7 +169,11 @@ class LlmClientTable {
                     MistralAIClientConfiguration(),
                     AmazonBedrockClientConfiguration(),
                     ClaudeCodeClientConfiguration(),
-                    CodexCliClientConfiguration()
+                    CodexCliClientConfiguration(),
+                    DeepSeekClientConfiguration(),
+                    ZhipuAiClientConfiguration(),
+                    MiniMaxClientConfiguration(),
+                    SiliconFlowClientConfiguration()
                 ).sortedBy { it.getClientName() }
             } else {
                 listOf(newLlmClientConfiguration)

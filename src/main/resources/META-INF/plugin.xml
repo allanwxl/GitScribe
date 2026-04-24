@@ -149,7 +149,7 @@
                 id="GitScribeSplitButton"
                 text="GitScribe"
                 description="根据选中的 VCS 变更通过 AI 生成提交信息"
-                icon="/icons/gitScribe15.svg"
+                icon="/icons/gitscribe.png"
                 class="com.github.allanwxl.gitscribe.intellij.plugin.GitScribeSplitButtonAction">
 
             <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>

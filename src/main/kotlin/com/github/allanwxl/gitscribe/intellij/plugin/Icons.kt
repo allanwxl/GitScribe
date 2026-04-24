@@ -17,7 +17,7 @@ object Icons {
         }
     }
 
-    val GITSCRIBE = GitScribeIcon("/icons/gitScribe15.svg", null)
+    val GITSCRIBE = GitScribeIcon("/icons/gitscribe.png", null)
     val OPEN_AI = GitScribeIcon("/icons/openai15bright.svg", "/icons/openai15dark.svg")
     val OLLAMA = GitScribeIcon("/icons/ollama15bright.svg", "/icons/ollama15dark.svg")
     val QIANFAN = GitScribeIcon("/icons/qianfan.png", null)
@@ -31,6 +31,10 @@ object Icons {
     val GITHUB = GitScribeIcon("/icons/github15bright.svg", "/icons/github15dark.svg")
     val MISTRAL = GitScribeIcon("/icons/mistral.svg", null)
     val AMAZON_BEDROCK = GitScribeIcon("/icons/amazonBedrock15.svg", "/icons/amazonBedrock15.svg")
+    val DEEP_SEEK = GitScribeIcon("/icons/deepseek15.svg", null)
+    val ZHIPU_AI = GitScribeIcon("/icons/zhipuAi15.svg", null)
+    val MINIMAX = GitScribeIcon("/icons/minimax15.svg", null)
+    val SILICON_FLOW = GitScribeIcon("/icons/siliconFlow15.svg", null)
 
     object Process {
         val STOP = GitScribeIcon("/icons/stop.svg", "/icons/stop_dark.svg")
