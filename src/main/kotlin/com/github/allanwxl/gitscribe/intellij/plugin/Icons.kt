@@ -17,7 +17,7 @@ object Icons {
         }
     }
 
-    val GITSCRIBE = GitScribeIcon("/icons/gitscribe.png", null)
+    val GITSCRIBE = GitScribeIcon("/icons/gitScribe15.svg", null)
     val OPEN_AI = GitScribeIcon("/icons/openai15bright.svg", "/icons/openai15dark.svg")
     val OLLAMA = GitScribeIcon("/icons/ollama15bright.svg", "/icons/ollama15dark.svg")
     val QIANFAN = GitScribeIcon("/icons/qianfan.png", null)

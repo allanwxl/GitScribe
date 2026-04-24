@@ -2,6 +2,7 @@ package com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.codexCli
 
 import com.github.allanwxl.gitscribe.intellij.plugin.GitScribeBundle.message
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmCliClientService
+import com.github.allanwxl.gitscribe.intellij.plugin.stripThinkTags
 import com.github.allanwxl.gitscribe.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -154,7 +155,7 @@ class CodexCliClientService(private val cs: CoroutineScope) : LlmCliClientServic
         return if (candidate.isBlank()) {
             Result.failure(IllegalStateException("No result from Codex CLI"))
         } else {
-            Result.success(candidate)
+            Result.success(candidate.stripThinkTags())
         }
     }
 

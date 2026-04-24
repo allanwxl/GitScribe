@@ -125,6 +125,10 @@ fun <T> Cell<T>.emptyText(emptyText: String): Cell<T> where T : JComponent, T : 
     return this
 }
 
+fun String.stripThinkTags(): String {
+    return this.replace(Regex("<think>[\\s\\S]*?</think>\\s*"), "").trim()
+}
+
 fun String.wrap(length: Int): String {
     var input = this
     val wrapped = StringBuilder()

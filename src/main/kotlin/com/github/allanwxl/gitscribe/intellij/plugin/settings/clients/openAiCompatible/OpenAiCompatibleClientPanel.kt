@@ -27,6 +27,16 @@ class OpenAiCompatibleClientPanel<C : OpenAiCompatibleClientConfiguration>(
         modelIdRow()
         temperatureRow(clientConfiguration::temperature.toMutableProperty(), ValidationInfoBuilder::temperatureValidNullable)
         topPDoubleRow(topPTextField, clientConfiguration::topP.toNullableProperty())
+        row {
+            checkBox(message("settings.llmClient.enableThinking"))
+                .bindSelected(clientConfiguration::enableThinking)
+                .comment(message("settings.llmClient.enableThinking.comment"))
+        }
+        row {
+            checkBox(message("settings.llmClient.reasoningSplit"))
+                .bindSelected(clientConfiguration::reasoningSplit)
+                .comment(message("settings.llmClient.reasoningSplit.comment"))
+        }
         cleanUpRegexRow()
         verifyRow()
     }

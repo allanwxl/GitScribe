@@ -2,6 +2,7 @@ package com.github.allanwxl.gitscribe.intellij.plugin.settings.clients
 
 import com.github.allanwxl.gitscribe.intellij.plugin.GitScribeBundle.message
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.AppSettings2
+import com.github.allanwxl.gitscribe.intellij.plugin.stripThinkTags
 import com.github.allanwxl.gitscribe.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -153,7 +154,7 @@ abstract class LlmClientService<C : LlmClientConfiguration>(private val cs: Coro
             )
             // This throws exception if completionDeferred.completeExceptionally(error) is called
             // which is handled by the function calling this function
-            onSuccess(completionDeferred.await())
+            onSuccess(completionDeferred.await().stripThinkTags())
         }
     }
 
@@ -169,6 +170,6 @@ abstract class LlmClientService<C : LlmClientConfiguration>(private val cs: Coro
                 )
             ).aiMessage().text()
         }
-        onSuccess(response)
+        onSuccess(response.stripThinkTags())
     }
 }

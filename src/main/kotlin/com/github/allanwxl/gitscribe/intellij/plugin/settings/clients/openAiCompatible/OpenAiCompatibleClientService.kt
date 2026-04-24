@@ -33,6 +33,11 @@ abstract class OpenAiCompatibleClientService<C : OpenAiCompatibleClientConfigura
             builder.temperature(it.toDouble())
         }
 
+        val customParams = mutableMapOf<String, Any>()
+        if (client.enableThinking) customParams["enable_thinking"] = true
+        if (client.reasoningSplit) customParams["reasoning_split"] = true
+        if (customParams.isNotEmpty()) builder.customParameters(customParams)
+
         return builder.build()
     }
 
@@ -48,6 +53,11 @@ abstract class OpenAiCompatibleClientService<C : OpenAiCompatibleClientConfigura
         client.temperature.takeIf { it.isNotBlank() }?.let {
             builder.temperature(it.toDouble())
         }
+
+        val customParams = mutableMapOf<String, Any>()
+        if (client.enableThinking) customParams["enable_thinking"] = true
+        if (client.reasoningSplit) customParams["reasoning_split"] = true
+        if (customParams.isNotEmpty()) builder.customParameters(customParams)
 
         return builder.build()
     }

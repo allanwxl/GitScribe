@@ -28,6 +28,12 @@ abstract class OpenAiCompatibleClientConfiguration(
     @Attribute
     var topP: Double? = null
 
+    @Attribute
+    var enableThinking: Boolean = false
+
+    @Attribute
+    var reasoningSplit: Boolean = false
+
     protected fun copyBaseTo(copy: OpenAiCompatibleClientConfiguration) {
         copy.id = id
         copy.name = name
@@ -39,5 +45,7 @@ abstract class OpenAiCompatibleClientConfiguration(
         copy.timeout = timeout
         copy.tokenIsStored = tokenIsStored
         copy.topP = topP
+        copy.enableThinking = enableThinking
+        copy.reasoningSplit = reasoningSplit
     }
 }

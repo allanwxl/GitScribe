@@ -2,6 +2,7 @@ package com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.claudeCod
 
 import com.github.allanwxl.gitscribe.intellij.plugin.GitScribeBundle.message
 import com.github.allanwxl.gitscribe.intellij.plugin.settings.clients.LlmCliClientService
+import com.github.allanwxl.gitscribe.intellij.plugin.stripThinkTags
 import com.github.allanwxl.gitscribe.intellij.plugin.wrap
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.EDT
@@ -116,7 +117,7 @@ class ClaudeCodeClientService(private val cs: CoroutineScope) : LlmCliClientServ
             } else if (isError) {
                 Result.failure(IllegalStateException(result))
             } else {
-                Result.success(result)
+                Result.success(result.stripThinkTags())
             }
         } catch (e: Exception) {
             Result.failure(IllegalStateException("Failed to parse Claude response: ${e.message}"))
