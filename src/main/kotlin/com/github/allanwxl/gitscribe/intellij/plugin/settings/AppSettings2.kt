@@ -98,7 +98,7 @@ class AppSettings2 : PersistentStateComponent<AppSettings2> {
     var appExclusions: Set<String> = setOf()
 
     @Attribute
-    var useStreamingResponse: Boolean = true
+    var useStreamingResponse: Boolean = false
 
     override fun getState() = this
 

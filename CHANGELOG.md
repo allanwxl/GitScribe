@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-04-28
+
+### Fixed
+
+- Fix plugin description must start with Latin characters for Marketplace.
+- Add plugin icon configuration.
+
 ## [0.0.1] - 2026-04-24
 
 ### Changed
@@ -16,4 +23,6 @@
 
 - Add current release change summary for local plugin distribution.
 
-[0.0.1]: https://github.com/allanwxl/GitScribe/releases/tag/v0.0.1
+[Unreleased]: https://github.com/allanwxl/GitScribe/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/allanwxl/GitScribe/compare/v0.0.1...v0.0.3
+[0.0.1]: https://github.com/allanwxl/GitScribe/commits/v0.0.1

@@ -10,23 +10,26 @@
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="" url="https://github.com/allanwxl">allanwxl</vendor>
 
+    <!-- Plugin icon for Marketplace -->
+    <icon>icons/gitScribe15.svg</icon>
+
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>GitScribe 是一个 IntelliJ Platform 插件，用于根据暂存或选中的 VCS 变更，通过大语言模型生成提交信息。</p>
-        <p>它会集成到 JetBrains IDE 的提交工作流中，读取本次提交涉及的文件或行级 diff，构造提示词，并把生成的提交信息写回提交窗口。</p>
-        <h3>功能</h3>
+        <p>GitScribe is an IntelliJ Platform plugin that generates commit messages from staged or selected VCS changes using large language models.</p>
+        <p>It integrates with the JetBrains IDE commit workflow, reading the files or line-level diffs involved in the commit, constructing prompts, and writing the generated commit message back to the commit window.</p>
+        <h3>Features</h3>
         <ul>
-            <li>根据 Git 或 Subversion diff 生成提交信息。</li>
-            <li>支持只使用提交窗口中选中的文件和行。</li>
-            <li>支持配置多个 LLM 客户端，并在生成时切换使用。</li>
-            <li>支持自定义提示词模板，可使用 <code>{diff}</code>、<code>{branch}</code>、<code>{locale}</code>、<code>{hint}</code>、历史提交信息等变量。</li>
-            <li>支持按项目配置提示词、输出语言、LLM 客户端和排除规则。</li>
-            <li>支持用 glob 规则排除不想发送给模型的路径。</li>
-            <li>支持在设置页校验 API 客户端配置。</li>
+            <li>Generate commit messages from Git or Subversion diffs.</li>
+            <li>Support using only selected files and lines in the commit dialog.</li>
+            <li>Configure multiple LLM clients and switch between them when generating.</li>
+            <li>Custom prompt templates with variables like <code>{diff}</code>, <code>{branch}</code>, <code>{locale}</code>, <code>{hint}</code>, and historical commit messages.</li>
+            <li>Per-project configuration for prompts, output language, LLM clients, and exclusion rules.</li>
+            <li>Glob patterns to exclude paths you don't want to send to the model.</li>
+            <li>Validate API client configuration in the settings page.</li>
         </ul>
-        <h3>支持的 LLM 客户端</h3>
+        <h3>Supported LLM Clients</h3>
         <ul>
             <li>Amazon Bedrock</li>
             <li>Anthropic</li>
@@ -43,38 +46,31 @@
             <li>Ollama</li>
             <li>OpenAI</li>
             <li>Qianfan</li>
-            <li>智谱</li>
-            <li>硅基流动</li>
+            <li>Zhipu AI</li>
+            <li>SiliconFlow</li>
         </ul>
-        <p>大部分在线模型客户端基于 <a href="https://github.com/langchain4j/langchain4j">langchain4j</a> 实现。CLI 客户端会调用本机已安装的命令行工具，并使用其输出作为提交信息来源。</p>
-        <h3>兼容性</h3>
+        <p>Most online model clients are implemented based on <a href="https://github.com/langchain4j/langchain4j">langchain4j</a>. CLI clients invoke locally installed command-line tools and use their output as commit message source.</p>
+        <h3>Compatibility</h3>
         <ul>
-            <li>IntelliJ Platform：2024.2+</li>
-            <li>Java 工具链：21</li>
-            <li>VCS 集成：Git 和 Subversion</li>
+            <li>IntelliJ Platform: 2024.2+</li>
+            <li>Java Toolchain: 21</li>
+            <li>VCS Integration: Git and Subversion</li>
         </ul>
-        <p>理论上，支持 IntelliJ Platform 提交流程的 JetBrains IDE 都可以使用，例如 IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、DataGrip、RubyMine、Rider 和 DataSpell。</p>
-        <h3>使用方式</h3>
+        <p>Theoretically, any JetBrains IDE that supports the IntelliJ Platform commit flow can use it, such as IntelliJ IDEA, Android Studio, PyCharm, WebStorm, GoLand, CLion, PhpStorm, DataGrip, RubyMine, Rider, and DataSpell.</p>
+        <h3>Usage</h3>
         <ol>
-            <li>打开 Settings &gt; Tools &gt; GitScribe。</li>
-            <li>添加并配置一个 LLM 客户端。</li>
-            <li>可选：编辑默认提示词，或添加自己的提示词模板。</li>
-            <li>打开提交窗口。</li>
-            <li>点击提交信息工具栏中的 GitScribe 按钮，或使用快捷键 Ctrl + Alt + C。</li>
+            <li>Open Settings &gt; Tools &gt; GitScribe.</li>
+            <li>Add and configure an LLM client.</li>
+            <li>Optional: Edit the default prompt or add your own prompt templates.</li>
+            <li>Open the commit dialog.</li>
+            <li>Click the GitScribe button in the commit message toolbar, or use the shortcut Ctrl + Alt + C.</li>
         </ol>
-        <p>如果使用 Claude Code CLI 或 Codex CLI，请确保对应命令行工具已经安装并能通过 PATH 找到，或者在 GitScribe 设置页中手动指定 CLI 路径。</p>
-        <h3>演示</h3>
-        <p>
-            <img
-            src="https://raw.githubusercontent.com/allanwxl/GitScribe/main/screenshots/plugin-white.gif"
-            border="0"
-            width="600"
-            alt="GitScribe 演示"/>
-        </p>
-        <h3>链接</h3>
+        <p>If using Claude Code CLI or Codex CLI, ensure the corresponding command-line tool is installed and accessible via PATH, or manually specify the CLI path in GitScribe settings.</p>
+
+        <h3>Links</h3>
         <ul>
-            <li><a href="https://github.com/allanwxl/GitScribe">GitHub 仓库</a></li>
-            <li><a href="https://github.com/allanwxl/GitScribe/issues">提交 Bug 或功能建议</a></li>
+            <li><a href="https://github.com/allanwxl/GitScribe">GitHub Repository</a></li>
+            <li><a href="https://github.com/allanwxl/GitScribe/issues">Report Bugs or Feature Requests</a></li>
         </ul>
     ]]></description>
 
